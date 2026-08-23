@@ -1,6 +1,6 @@
 # Run it with:
 # Rscript error_bounds.R
-# or in the R console: source("error_bounds.R") then run_error_bounds().
+# or in the R console: source("legaspi_ps1.R") then run_error_bounds().
 
 error_bounds <- function(formula, values, errors) {
   values <- as.list(values)
