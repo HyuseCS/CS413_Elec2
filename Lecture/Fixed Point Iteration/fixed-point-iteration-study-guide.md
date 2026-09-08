@@ -110,6 +110,101 @@ factor the left:         x(3x² + 1)   = 1 + 2x³
                          x = (1 + 2x³)/(3x² + 1)
 ```
 
+**Why add `2x³`? Where did that come from?**
+
+You need `x` alone on the left. Every term on the left has an `x` in it, so you
+factor one out. Whatever is left inside the bracket becomes your denominator.
+
+The plain way, with no adding at all:
+
+```
+x(x² + 1) = 1     →   g(x) = 1/(x² + 1)
+```
+
+That is legal and it works. But it is slow. So the board adds `x³` first to get
+a different bracket.
+
+**Adding `x³` is always legal.** Add it to both sides and the equation stays
+true. Adding it twice looks like this:
+
+```
+x³ + x                    = 1
+x³ + x³ + x³ + x          = 1 + x³ + x³
+3x³ + x                   = 1 + 2x³
+```
+
+Two extra on the left, two extra on the right. Balanced.
+
+**Do it with a letter instead of a number.** Let `a` be the final count of `x³`
+on the left. You added `a − 1` copies:
+
+```
+a·x³ + x       = 1 + (a−1)x³
+x(a·x² + 1)    = 1 + (a−1)x³
+x              = (1 + (a−1)x³) / (a·x² + 1)
+```
+
+So the general fixed-point form is:
+
+```
+g(x) = (1 + (a−1)x³) / (a·x² + 1)
+```
+
+Every `a` gives a valid `g` with the same root. Put `a = 3` and you get the
+board's `(1 + 2x³)/(3x² + 1)`. So `a` is a free knob, and now you can ask:
+**which `a` is fastest?**
+
+**Fastest means `g'` at the root is closest to zero.** `g'` is how much of the
+error survives one step. `0.6` means 60% of the error is still there. `0` means
+the error dies.
+
+Work out `g'` at the root:
+
+```
+top     N = 1 + (a−1)x³      N' = 3(a−1)x²
+bottom  D = a·x² + 1         D' = 2a·x
+
+g' = (N'D − N D') / D²
+
+at the root, g(r) = r, which means N = r·D. Swap it in:
+
+g'(r) = (N' − r·D') / D
+      = (3(a−1)r² − 2a·r²) / D
+      = r²(a − 3) / D
+```
+
+```
+g'(root) = r²(a − 3) / (a·r² + 1)
+```
+
+The `N = r·D` swap is the trick. It kills a whole term and leaves a clean
+`a − 3`.
+
+**Now read the formula.** `r²` is not zero. The bottom is always positive. So
+the only way to get `g' = 0` is `a − 3 = 0`.
+
+With `r = 0.682328` and `r² = 0.465571`:
+
+| `a` | top: `r²(a−3)` | bottom: `a·r² + 1` | `g'` | speed |
+|---|---|---|---|---|
+| 1 | `−0.9311` | `1.4656` | **−0.635** | slow |
+| 2 | `−0.4656` | `1.9311` | **−0.241** | ok |
+| **3** | `0` | `2.3967` | **0** | **very fast** |
+| 4 | `+0.4656` | `2.8623` | **+0.163** | slower again |
+
+`a = 3` is the crossing point where the error flips from negative to positive.
+At exactly that spot the error dies and your correct digits double each step.
+
+**`a = 3` means you added `2x³`.** That is the whole reason for the `2`.
+
+The `2x³` left over on the right side is just the price of adding it to the
+left too. It cannot cancel, and that is fine, because `g` is allowed to
+contain `x`.
+
+Why 3 and not some other number: `3x² + 1` is exactly `f'(x)` for
+`f(x) = x³ + x − 1`. Matching the denominator to the derivative is what forces
+`g'(root) = 0`.
+
 ```
 iter   x
 0      0.500000000
