@@ -7,20 +7,20 @@
 Guess a number between 1 and 100. Someone says "too high" or "too low". You
 always guess the middle. Every guess cuts the range in half.
 
-Bisection is that game. The "too high / too low" answer is the **sign** of `f(x)`.
+Bisection is that game. The "too high / too low" answer is the **sign** of $f(x)$.
 
 ## The one rule that starts it
 
-Pick `[a, b]` where `f(a)` and `f(b)` have **opposite signs**:
+Pick $[a, b]$ where $f(a)$ and $f(b)$ have **opposite signs**:
 
-```
-f(a) · f(b) < 0
-```
+$$
+f(a) \cdot f(b) < 0
+$$
 
-One is `+`, one is `−`. A continuous curve going from below zero to above zero
+One is $+$, one is $-$. A continuous curve going from below zero to above zero
 **must** cross zero somewhere between. That crossing is your root.
 
-If both signs are the same → say **"no roots in the given interval"**.
+If both signs are the same $\to$ say **"no roots in the given interval"**.
 
 ```
  f(a) = −        root is in here        f(b) = +
@@ -30,22 +30,26 @@ If both signs are the same → say **"no roots in the given interval"**.
 
 ## The loop
 
-```
-c = (a + b) / 2          ← midpoint, your current answer
+$$
+c = \frac{a+b}{2} \quad \text{midpoint, your current answer}
+$$
 
-if f(a)·f(c) < 0   →  root is on the LEFT half   →  b = c
-else               →  root is on the RIGHT half  →  a = c
+$$
+\begin{aligned}
+&\text{if } f(a) \cdot f(c) < 0 \to \text{root is on the LEFT half} \to b = c \\
+&\text{else} \to \text{root is on the RIGHT half} \to a = c
+\end{aligned}
+$$
 
 repeat
-```
 
 The interval shrinks by half every pass. That is it.
 
 ## Worked example (the `ps2.png` one)
 
-`f(x) = x³ + x − 1`, interval `[0, 1]`, 9 iterations.
+$f(x) = x^3 + x - 1$, interval $[0, 1]$, 9 iterations.
 
-Sign check first: `f(0) = −1`, `f(1) = +1`. Opposite. Good.
+Sign check first: $f(0) = -1$, $f(1) = +1$. Opposite. Good.
 
 | iter | a | b | c = mid | f(c) | keep |
 |---|---|---|---|---|---|
@@ -59,7 +63,7 @@ Sign check first: `f(0) = −1`, `f(1) = +1`. Opposite. Good.
 | 8 | 0.679688 | 0.687500 | 0.683594 | +0.003037 | left |
 | 9 | 0.679688 | 0.683594 | 0.681641 | −0.001646 | right |
 
-Answer: `c = (0.681641 + 0.683594)/2 = 0.6826`.
+Answer: $c = (0.681641 + 0.683594)/2 = 0.6826$.
 
 Shrinking interval, drawn:
 
@@ -74,16 +78,16 @@ Shrinking interval, drawn:
 
 ## Error bound (the one formula to memorize)
 
-After `n` iterations:
+After $n$ iterations:
 
-```
-error ≤ (b − a) / 2ⁿ
-```
+$$
+\text{error} \le \frac{b-a}{2^n}
+$$
 
-Starting width `1`, after 9 steps: `1/512 = 0.00195`. So `0.6826 ± 0.002`.
+Starting width `1`, after 9 steps: $1/512 = 0.00195$. So $0.6826 \pm 0.002$.
 
-Want a set accuracy? Solve for `n`. To get `0.0001` on `[0, 1]`:
-`1/2ⁿ ≤ 0.0001` → `2ⁿ ≥ 10000` → `n = 14`.
+Want a set accuracy? Solve for $n$. To get `0.0001` on $[0, 1]$:
+$1/2^n \le 0.0001 \to 2^n \ge 10000 \to n = 14$.
 
 **You can say the error before you start.** Fixed-point iteration cannot do that.
 
@@ -91,7 +95,7 @@ Want a set accuracy? Solve for `n`. To get `0.0001` on `[0, 1]`:
 
 | | Bisection | Fixed-Point |
 |---|---|---|
-| Always works? | Yes, if signs are opposite | No, depends on `g` |
+| Always works? | Yes, if signs are opposite | No, depends on $g$ |
 | Speed | Slow, steady (halves each step) | Can be very fast or diverge |
 | Error known ahead? | Yes | No |
 
@@ -99,7 +103,7 @@ Bisection is the safe one. Slow but it never fails.
 
 ## Common mistakes
 
-1. Not checking `f(a)·f(b) < 0` first.
+1. Not checking $f(a) \cdot f(b) < 0$ first.
 2. Using degrees instead of radians for trig functions.
-3. Comparing `f(c)` to `f(b)` instead of `f(a)`. Pick one side and stay with it.
-4. Forgetting the answer is the **last midpoint**, not `a` or `b`.
+3. Comparing $f(c)$ to $f(b)$ instead of $f(a)$. Pick one side and stay with it.
+4. Forgetting the answer is the **last midpoint**, not $a$ or $b$.
