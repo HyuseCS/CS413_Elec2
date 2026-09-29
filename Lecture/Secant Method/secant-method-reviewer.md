@@ -268,3 +268,73 @@ $r \approx 2.094551482$ at step 7.
 **Look at the start.** $x_1 = 3$ is far off, so $f(3) = 16$ is big. The first
 secant line is steep, and $x_2$ lands close. After that, the error drops
 faster each step, the same as in the worked example.
+
+---
+
+## 12. Calculator trick (Casio fx-350CW)
+
+Checked against the fx-350CW manual. Tested in code on Practice 1: it gives the
+same numbers as the table in section 11.
+
+**First: radians.** SETTINGS → Angle Unit → Radian. Check this before every trig
+problem.
+
+### Step 1. Store $f(x)$ one time
+
+Open the f(x) menu → **[Define f(x)]** → type the function (e.g. $x^3 - 2x - 5$)
+→ **=**.
+
+Now `f(3)` gives $f$ at 3. You never type the whole function again.
+
+### Step 2. The A/B trick
+
+1. Put $x_0$ in **A**: type `2` → **=** → VARIABLE → **[A=] → Store**.
+2. Put $x_1$ in **B**: type `3` → **=** → VARIABLE → **[B=] → Store**.
+3. Type the secant formula **once**:
+
+   ```
+   B − f(B)(B − A) ÷ (f(B) − f(A))
+   ```
+
+   Press **=**. That is $x_2$. Write it down.
+4. **The trick:** store each new answer over the **oldest** value. Switch
+   between A and B:
+
+   | Result | Store in | Because it replaces |
+   |---|---|---|
+   | $x_2$ | **A** | $x_0$ (oldest) |
+   | $x_3$ | **B** | $x_1$ |
+   | $x_4$ | **A** | $x_2$ |
+   | $x_5$ | **B** | $x_3$ |
+
+5. After each store, press **◀** to get the same formula back, then **=**.
+
+**Why it works.** The secant formula gives the same answer if you swap A and B:
+
+$$
+x_{k+1} = \frac{x_{k-1} f(x_k) - x_k f(x_{k-1})}{f(x_k) - f(x_{k-1})}
+$$
+
+Swap $x_k$ and $x_{k-1}$: the top and the bottom both flip sign, so the value
+does not change. The order does not matter. You only need to throw away the
+oldest point each time.
+
+**For the $f(x_k)$ column:** type `f(A)` or `f(B)` → **=**.
+
+### Bonus: Newton with one key
+
+**[Define g(x)]** → type $f'(x)$ (e.g. $3x^2 - 2$). Then:
+
+1. Type $x_0$ → **=**.
+2. Type `Ans − f(Ans) ÷ g(Ans)` → **=**.
+3. Press **=** again and again. Each press is the next $x$.
+
+### Bonus: find starting points
+
+Define $f(x)$, open the **Table** app. Look for two rows next to each other where
+$f(x)$ changes sign. Start there.
+
+### What it cannot do
+
+The fx-350CW has **no derivative** and **no Solve**. You find $f'(x)$ by hand
+(see `trig-derivatives-cheat-sheet.md`). The calculator only does the arithmetic.
