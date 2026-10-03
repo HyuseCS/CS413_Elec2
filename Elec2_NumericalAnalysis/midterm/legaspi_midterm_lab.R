@@ -23,8 +23,9 @@ newton_secant <- function(f, x0, accuracy) {
 
 con <- if (!interactive()) file("stdin", "r")
 ask <- function(prompt) {
+  if (interactive()) return(readline(prompt))
   cat(prompt)
-  if (interactive()) readline() else readLines(con, n = 1)
+  readLines(con, n = 1)
 }
 
 f <- eval(parse(text = paste("function(x)", ask("f(x) = "))))
