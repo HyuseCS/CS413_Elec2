@@ -1,17 +1,43 @@
+library(Deriv)
+
+newton_secant_root <- function(f, x0, accuracy) {
+  d <- Deriv(f, "x")
+  x1 <- x0 - (f(x0) / d(x0))
+  cat(sprintf("Newton x1: %.*f\n", accuracy + 2, x1))
+  xs <- c(x0, x1)
+  i <- 1
+  while (is.finite(x1) && round(x1, accuracy) != round(x0, accuracy)) {
+    r <- round(tail(xs, 4), accuracy)
+    if (i >= 50 || (length(r) == 4 && r[1] == r[3] && r[2] == r[4])) break
+    x2 <- x1 - (f(x1) * (x1 - x0) / (f(x1) - f(x0)))
+    x0 <- x1
+    x1 <- x2
+    i <- i + 1
+    cat(sprintf("Secant x%d: %.*f\n", i, accuracy + 2, x1))
+    xs <- c(xs, x1)
+  }
+  if (!is.finite(x1) || round(x1, accuracy) != round(x0, accuracy)) return(cat("\nThe root diverges.\n"))
+  if (i == 1) cat("\nNewton already converged in the first iteration, so the secant method is not needed.\n")
+  cat(sprintf("\nThe root is %.*f\n", accuracy, x1))
+}
+
+con <- if (!interactive()) file("stdin", "r")
+ask <- function(prompt) {
+  if (interactive()) return(readline(prompt))
+  cat(prompt)
+  readLines(con, n = 1)
+}
+
+f <- eval(parse(text = paste("function(x)", ask("f(x) = "))))
+x0 <- as.numeric(ask("x0 = "))
+accuracy <- as.numeric(ask("Number of decimal places = "))
+newton_secant_root(f, x0, accuracy)
+
+
+=======================================================================================================
+
+
 Question: What is your output if in the first iteration, the newton method already converged? Explain your answer.
 
-Output:
-If Newton's method has already converged in the first iteration, the output is x1, rounded to the requested decimal places. The secant method does not run.
-
-Example, with f(x) = x^2 - 4, x0 = 2 and 4 decimal places:
-
-  Newton x1: 2.000000
-
-  Newton already converged in the first iteration, so the secant method is not needed.
-
-  The root is 2.0000
-
-Explanation:
-1. The stop rule is already met. The function stops when two guesses are the same at the requested decimal places. If round(x1) = round(x0), x1 already has the required accuracy. More secant steps will not change the answer at that accuracy.
-
-2. The secant formula can fail here. The secant step divides by f(x1) - f(x0). If Newton converged because x0 was already the root, then x1 = x0 and f(x1) = f(x0). The denominator is then 0, and secant gives 0/0 = NaN (not a number). So the function must check for convergence after the Newton step and return x1 before secant starts.
+Answer:
+If Newton's method has already converged in the first iteration, the output is x1, rounded to the requested decimal places, and the secant method does not run. The function stops when two guesses are the same at the requested decimal places. If round(x1) = round(x0), x1 already has the required accuracy, so more secant steps will not change the answer. Also, the secant step divides by f(x1) - f(x0). If x0 was already the root, then x1 = x0 and f(x1) = f(x0), so the denominator is 0 and secant gives 0/0 = NaN (not a number). This is why the function checks for convergence after the Newton step and returns x1 before secant starts.
