@@ -1,10 +1,10 @@
 library(Deriv)
 
 newton_secant <- function(f, x0, accuracy) {
-  row <- function(i, method, a, b) cat(i, method, sprintf("%.*f", accuracy + 2, c(a, b, f(b))), "\n", sep = "\t")
+  row <- function(i, method, a, b) cat(i, method, sprintf("%.*f", accuracy + 2, c(a, b)), "\n", sep = "\t")
   d <- Deriv(f, "x")
   x1 <- x0 - (f(x0) / d(x0))
-  cat("i", "method", "x_old", "x_new", "f(x_new)", "\n", sep = "\t")
+  cat("i", "method", "x_old", "x_new", "\n", sep = "\t")
   row(1, "Newton", x0, x1)
   xs <- c(x0, x1)
   i <- 1
