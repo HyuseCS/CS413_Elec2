@@ -1,0 +1,17 @@
+Question: What is your output if in the first iteration, the newton method already converged? Explain your answer.
+
+Output:
+If Newton's method has already converged in the first iteration, the output is x1, rounded to the requested decimal places. The secant method does not run.
+
+Example, with f(x) = x^2 - 4, x0 = 2 and 4 decimal places:
+
+  Newton x1: 2.000000
+
+  Newton already converged in the first iteration, so the secant method is not needed.
+
+  The root is 2.0000
+
+Explanation:
+1. The stop rule is already met. The function stops when two guesses are the same at the requested decimal places. If round(x1) = round(x0), x1 already has the required accuracy. More secant steps will not change the answer at that accuracy.
+
+2. The secant formula can fail here. The secant step divides by f(x1) - f(x0). If Newton converged because x0 was already the root, then x1 = x0 and f(x1) = f(x0). The denominator is then 0, and secant gives 0/0 = NaN (not a number). So the function must check for convergence after the Newton step and return x1 before secant starts.
