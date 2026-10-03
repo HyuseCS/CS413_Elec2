@@ -1,6 +1,16 @@
 library(Deriv)
 
-newton_secant_root <- function(f, x0, accuracy) {
+con <- if (!interactive()) file("stdin", "r")
+ask <- function(prompt) {
+  if (interactive()) return(readline(prompt))
+  cat(prompt)
+  readLines(con, n = 1)
+}
+
+newton_secant_root <- function() {
+  f <- eval(parse(text = paste("function(x)", ask("f(x) = "))))
+  x0 <- as.numeric(ask("x0 = "))
+  accuracy <- as.numeric(ask("Number of decimal places = "))
   d <- Deriv(f, "x")
   x1 <- x0 - (f(x0) / d(x0))
   cat(sprintf("Newton x1: %.*f\n", accuracy + 2, x1))
@@ -20,15 +30,3 @@ newton_secant_root <- function(f, x0, accuracy) {
   if (i == 1) cat("\nNewton already converged in the first iteration, so the secant method is not needed.\n")
   cat(sprintf("\nThe root is %.*f\n", accuracy, x1))
 }
-
-con <- if (!interactive()) file("stdin", "r")
-ask <- function(prompt) {
-  if (interactive()) return(readline(prompt))
-  cat(prompt)
-  readLines(con, n = 1)
-}
-
-f <- eval(parse(text = paste("function(x)", ask("f(x) = "))))
-x0 <- as.numeric(ask("x0 = "))
-accuracy <- as.numeric(ask("Number of decimal places = "))
-newton_secant_root(f, x0, accuracy)
