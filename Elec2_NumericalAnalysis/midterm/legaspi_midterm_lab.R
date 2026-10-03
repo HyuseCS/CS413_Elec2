@@ -1,6 +1,6 @@
 library(Deriv)
 
-newton_secant <- function(f, x0, accuracy) {
+find_root <- function(f, x0, accuracy) {
   d <- Deriv(f, "x")
   x1 <- x0 - (f(x0) / d(x0))
   cat(sprintf("Newton x1: %.*f\n", accuracy + 2, x1))
@@ -31,4 +31,4 @@ ask <- function(prompt) {
 f <- eval(parse(text = paste("function(x)", ask("f(x) = "))))
 x0 <- as.numeric(ask("x0 = "))
 accuracy <- as.numeric(ask("Number of decimal places = "))
-newton_secant(f, x0, accuracy)
+find_root(f, x0, accuracy)
