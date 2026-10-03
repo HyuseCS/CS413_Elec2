@@ -13,7 +13,9 @@ newton_secant_root <- function() {
   accuracy <- as.numeric(ask("Number of decimal places = "))
   d <- Deriv(f, "x")
   x1 <- x0 - (f(x0) / d(x0))
-  cat(sprintf("Newton x1: %.*f\n", accuracy + 2, x1))
+  cat(sprintf("Newton x1: %.*f", accuracy + 2, x1))
+  if (is.finite(x1) && round(x1, accuracy) != round(x0, accuracy)) cat(sprintf(" \u2260 x0 = %.*f", accuracy + 2, x0))
+  cat("\n")
   xs <- c(x0, x1)
   i <- 1
   while (is.finite(x1) && round(x1, accuracy) != round(x0, accuracy)) {
